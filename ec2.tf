@@ -1,6 +1,5 @@
 resource "aws_security_group" "sg-webserver" {
-  name = "Web Server"
-  vpc_id = "${aws_vpc.webserver_vpc.id}"
+  name = "Web Server ASG"
 
   ingress {
     from_port = "${var.webserver_port}"
@@ -27,7 +26,7 @@ resource "aws_security_group" "sg-webserver" {
   }
 
   tags {
-    Name = "Web Server Security Group"
+    Name = "Web Server Security Group - ASG"
     Owner = "jalzati@anomali.com"
     Department = "DevOps"
     Environment = "research"
@@ -57,13 +56,14 @@ resource "aws_launch_configuration" "webserver_launch_config" {
 
 resource "aws_autoscaling_group" "webserver_asg" {
   launch_configuration = "${aws_launch_configuration.webserver_launch_config.id}"
+  availability_zones = ["${data.aws_availability_zones.available_azs.names}"]
 
   min_size = 2
   max_size = 4
 
   tag {
     key = "Name"
-    value = "terraform-asg-example"
+    value = "WebServer ASG Example"
     propagate_at_launch = true
   }
 
