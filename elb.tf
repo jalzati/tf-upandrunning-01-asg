@@ -30,7 +30,7 @@ resource "aws_security_group" "sg-elb" {
 }
 
 resource "aws_elb" "webserver_elb" {
-  name = "WebServer ASG Example - Load Balancer"
+  name = "WebServer-ASG-Example-LB"
   availability_zones = [
     "${data.aws_availability_zones.available_azs.names}"]
 
