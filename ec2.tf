@@ -61,6 +61,9 @@ resource "aws_autoscaling_group" "webserver_asg" {
   availability_zones = ["${data.aws_availability_zones.available_azs.names}"]
   name = "WebServer ASG Example - AutoScaling Group"
 
+  load_balancers = ["${aws_elb.webserver_elb.name}"]
+  health_check_type = "ELB"
+
   min_size = 3
   max_size = 6
 
