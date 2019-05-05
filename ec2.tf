@@ -46,6 +46,8 @@ resource "aws_launch_configuration" "webserver_launch_config" {
   image_id        = "${var.ami}"
   instance_type   = "${var.instance_type}"
   security_groups = ["${aws_security_group.sg-webserver.id}"]
+  key_name = "${var.key_name}"
+  name = "WebServer ASG Example - Launch Config"
 
   user_data = "${file("install_apache.sh")}"
 
@@ -57,9 +59,10 @@ resource "aws_launch_configuration" "webserver_launch_config" {
 resource "aws_autoscaling_group" "webserver_asg" {
   launch_configuration = "${aws_launch_configuration.webserver_launch_config.id}"
   availability_zones = ["${data.aws_availability_zones.available_azs.names}"]
+  name = "WebServer ASG Example - AutoScaling Group"
 
-  min_size = 2
-  max_size = 4
+  min_size = 3
+  max_size = 6
 
   tag {
     key = "Name"
