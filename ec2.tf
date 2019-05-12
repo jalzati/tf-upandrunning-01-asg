@@ -5,7 +5,7 @@ resource "aws_security_group" "sg-webserver" {
     from_port = "${var.webserver_port}"
     protocol = "tcp"
     to_port = "${var.webserver_port}"
-    cidr_blocks = ["${var.vpn_ip}"]
+    cidr_blocks = ["0.0.0.0/0"]
     description = "Allow HTTP connections from anywhere in the Internet"
   }
 

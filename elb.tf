@@ -1,11 +1,11 @@
 resource "aws_security_group" "sg-elb" {
-  name = "Web Server ASG - ELB"
+  name = "WebServer AutoScalingGroup - ELB"
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["${var.subnet_cidrs}"]
+    cidr_blocks = ["0.0.0.0/0"]
     description = "Allow HTTP connections from VPN server"
   }
 
@@ -18,7 +18,7 @@ resource "aws_security_group" "sg-elb" {
   }
 
   tags {
-    Name = "Web Server Security Group - ELB - ASG"
+    Name = "Web_Server_Security_Group - ELB - ASG"
     Owner = "jalzati@anomali.com"
     Department = "DevOps"
     Environment = "research"
@@ -30,7 +30,8 @@ resource "aws_security_group" "sg-elb" {
 }
 
 resource "aws_elb" "webserver_elb" {
-  name = "WebServer-ASG-Example-LB"
+  name = "WebServer-ASG-LB"
+  security_groups = ["${aws_security_group.sg-elb.id}"]
   availability_zones = [
     "${data.aws_availability_zones.available_azs.names}"]
 
@@ -43,9 +44,16 @@ resource "aws_elb" "webserver_elb" {
 
   health_check {
     healthy_threshold = 2
-    interval = 30
+    interval = 29
     target = "HTTP:${var.webserver_port}/"
-    timeout = 3
-    unhealthy_threshold = 2
+    timeout = 5
+    unhealthy_threshold = 4
+  }
+
+  tags {
+    Name = "Web Server-ELB-ASG"
+    Owner = "jalzati@anomali.com"
+    Department = "DevOps"
+    Environment = "research"
   }
 }
