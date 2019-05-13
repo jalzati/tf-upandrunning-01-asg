@@ -44,10 +44,10 @@ resource "aws_elb" "webserver_elb" {
 
   health_check {
     healthy_threshold = 2
-    interval = 29
+    interval = 20
     target = "HTTP:${var.webserver_port}/"
-    timeout = 5
-    unhealthy_threshold = 4
+    timeout = 2
+    unhealthy_threshold = 2
   }
 
   tags {
